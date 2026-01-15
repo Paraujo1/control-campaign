@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Q1 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .video-container {
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <!-- SUBSTITUI "SEU_VIDEO.mp4" pelo nome do teu ficheiro de vídeo -->
+        <video controls autoplay playsinline>
+            <source src="SEU_VIDEO.mp4" type="video/mp4">
+            O seu navegador não suporta vídeo.
+        </video>
+    </div>
+    
+    <script>
+        // Sistema de Tracking Individual por Cliente
+        function getClientId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('cliente') || 'desconhecido';
+        }
+        
+        function trackEvent(eventType) {
+            const clientId = getClientId();
+            const timestamp = new Date().toISOString();
+            
+            fetch('https://formsubmit.co/ajax/pedro.araujo@artsana.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Cliente: clientId,
+                    Evento: eventType,
+                    Data: timestamp
+                })
+            }).catch(err => console.log('Tracking enviado'));
+        }
+        
+        const video = document.querySelector('video');
+        
+        // Track página visualizada
+        window.addEventListener('load', () => trackEvent('Página Visualizada'));
+        
+        // Track vídeo iniciado
+        video.addEventListener('play', () => trackEvent('Vídeo Iniciado'));
+        
+        // Track vídeo completo
+        video.addEventListener('ended', () => trackEvent('Vídeo Completo'));
+    </script>
+</body>
+</html> 
